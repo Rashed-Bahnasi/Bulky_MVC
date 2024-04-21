@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BulkyBook.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240420062858_addProductAndCategoryToDb")]
+    [Migration("20240420073320_addProductAndCategoryToDb")]
     partial class addProductAndCategoryToDb
     {
         /// <inheritdoc />
