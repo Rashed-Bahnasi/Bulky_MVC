@@ -60,12 +60,14 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
                 string wwwRootPath = _webHostEnvironment.WebRootPath;
                 if (file != null)
                 {
+                    // Guid.NewGuid().ToString() to make a random name -> rather then keep the seem name
                     string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                    // this path where we want to save the picture
                     string productPath = Path.Combine(wwwRootPath, @"images\product");
 
                     if (!string.IsNullOrEmpty(productVM.Product.ImageUrl))
                     {
-                        //delete the old image
+                        //delete the old image ---- TrimStart('\\')) -> to delete the {\\} from database and will give us the old image
                         var oldImagePath = Path.Combine(wwwRootPath, productVM.Product.ImageUrl.TrimStart('\\'));
 
                         if (System.IO.File.Exists(oldImagePath))
@@ -73,20 +75,23 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
                             System.IO.File.Delete(oldImagePath);
                         }
                     }
-
+                    //saving the picture
+                    //Guid.NewGuid().ToString() دمج الميار مع اسم الملف -> (FileMode.Create) -> to create a file for pic
                     using (var fileStream = new FileStream(Path.Combine(productPath, fileName), FileMode.Create))
                     {
                         file.CopyTo(fileStream);
                     }
-
+                    //to save the pic in this path
                     productVM.Product.ImageUrl = @"\images\product\" + fileName;
                 }
 
+                //new prod
                 if (productVM.Product.Id == 0)
                 {
                     _unitOfWork.Product.Add(productVM.Product);
 
                 }
+                //old prod
                 else
                 {
                     _unitOfWork.Product.Update(productVM.Product);
